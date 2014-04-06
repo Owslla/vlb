@@ -1,0 +1,14 @@
+    collection = getCollection();
+    process(collection, target);
+    collection = getCollection();
+    collection = getCollection();
+    collection = getCollection();
+    collection = getCollection();
+    collection = getCollection();
+    collection = getCollection();
+    process(collection, target);
+    process(collection, target);
+    process(collection, target);
+    process(collection, target);
+process(collection, target);
+process(collection, target);
