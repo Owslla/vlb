@@ -209,7 +209,7 @@ or
 ...We'll launch as soon as we have the content...    
 
     keystrokes
-{start}光标在content的c字母上（本教程所以未指明{start}的都在original的最开头）
+    {start}光标在content的c字母上（本教程所以未指明{start}的都在original的最开头）
 `*cwcopy< Esc>n.`
 
     result
@@ -898,3 +898,414 @@ for (counter=1; counter <= 10; counter++) {
 ||q/ ||Open the command-line window with history of searches||
 ||q: ||Open the command-line window with history of Ex commands||
 ||ctrl-f ||Switch from Command-Line mode to the command-line window||
+
+**Tip35运行Shell 脚本(Run Commands in the Shell)**
+
+---
+    original
+    none
+<p>
+
+    keystrokes
+`:!ls`
+    
+    result
+
+    [No write since last change]
+    Practical-Vim-Edit-Text-at-the-Speed-of-Thought.pdf  praticaldir  Tips.md
+>提示:可能显示不一样，因为目录下内容不一样
+
+>当然你也可以把vim置于后台来终端跑命令,请查看bash 的< C-z> ，jobs和fg命令.
+
+---
+    original
+first name,last name,email  
+john,smith,john@example.com  
+drew,neil,drew@vimcasts.org  
+jane,doe,jane@example.com  
+
+    keystrokes
+`:'<,'>!sort -t',' -k2`
+
+    result
+
+    jane,doe,jane@example.com
+    first name,last name,email
+    drew,neil,drew@vimcasts.org
+    john,smith,john@example.com
+
+>提示:请自行调整范围
+
+*一些命令*表
+
+ ||Command ||Effect||
+ ||:shell ||Start a shell (return to Vim by typing exit)||
+ ||:!{cmd} ||Execute {cmd} with the shell||
+ ||:read !{cmd} ||Execute {cmd} in the shell and insert its standard output below the cursor||
+ ||:[range]write !{cmd} ||Execute {cmd} in the shell with [range] lines as standard input||
+ ||:[range]!{filter} ||Filter the specified [range] through external program {filter}||
+
+
+**Tip36 通过缓冲列表追踪打开的多个文件(TrackOpenFileswiththeBufferList)**
+
+> 一定要理解什么是file ,什么是buffer 
+
+---
+>vim 能同时打开多个文件，比如vim *.html ,这种情况下，可以运行`:ls`
+
+    result
+    你可能看到类似于下列的列表:
+
+    :ls
+    1 %a   "[No Name]"                    line 1
+    Press ENTER or type command to continue
+
+**Tip37 通过参数列表分组Buffers(Group Buffers into a Collection with the Argument List)**
+
+>具体可自行运行体验，或者 google 或者交流与我，当然你能直接从下表中看出端倪
+
+||Glob ||Files Matching the Expansion||
+||:args *.* ||index.html||
+|| ||app.js||
+||:args **/*.js ||app.js||
+||||lib/framework.js||
+||||app/controllers/Mailer.js||
+||||...etc||
+||:args **/*.* ||app.js||
+||||index.js||
+||||lib/framework.js||
+||||lib/theme.css||
+||||app/controllers/Mailer.js||
+||||...etc||
+
+**Tip38管理隐藏文件(Manage Hidden Files)**
+>实在不好讲解到此文档中，细交流于我
+
+**Tip39分窗口(Divide Your Workspace into Split Windows)**
+>*多窗口生成命令*表
+
+||Command|| Effect||
+||< C-w>s|| Split the current window horizontally, reusing the current buffer in the new window||
+||< C-w>v|| Split the current window vertically, reusing the current buffer in the new window||
+
+||:sp[lit] {file}|| Split the current window horizontally, loading {file} into the new window|| 
+||:vsp[lit] {file}|| Split the current window vertically, loading {file} into the new window||
+
+>编辑要焦点，*焦点切换*表
+
+||Command ||Effect||
+||<C-w>w ||Cycle between open windows||
+||<C-w>h ||Focus the window to the left||
+||<C-w>j ||Focus the window below||
+||<C-w>k ||Focus the window above||
+||<C-w>l ||Focus the window to the right||
+
+>*关闭窗口命令*表
+
+||Ex Command ||Normal Command ||Effect||
+||:cl[ose] ||<C-w>c ||Close the active window||
+||:on[ly] ||<C-w>o ||Keep only the active window, closing all others ||
+
+>*调整窗口大小命令*表
+
+ ||Keystrokes ||Buffer Contents||
+ ||<C-w>= ||Equalize width and height of all windows||
+ ||<C-w>_ ||Maximize height of the active window||
+ ||<C-w>| ||Maximize width of the active window||
+ ||[N]<C-w>_ ||Set active window height to [N] rows||
+ ||[N]<C-w>| ||Set active window width to [N] columns||
+
+
+**Tip40用Tab页来管理布局(Organize Your Window Layouts with Tab Pages)**
+>你需要查看 (`:h CTRL-W_T `).
+
+>*标签页操作命令*表
+
+ ||Command ||Effect||
+ ||:tabe[dit] {filename} ||Open {filename} in a new tab||
+ ||<C-w>T ||Move the current window into its own tab||
+ ||:tabc[lose] ||Close the current tab page and all of its windows||
+ ||:tabo[nly] ||Keep the active tab page, closing all others||
+
+>*标签页切换命令*表
+
+||Ex Command ||Normal Command ||Effect||
+||:tabn[ext] {N} ||{N}gt ||Switch to tab page number {N}||
+||:tabn[ext] ||gt ||Switch to the next tab page||
+||:tabp[revious] ||gT ||Switch to the previous tab page||
+
+**Tip41通过:edit文件路径打开文件(OpenaFileby ItsFilepathUsing‘:edit’)**
+
+>使用:edit /path/to/file.t 打开文件。要配合使用:pwd 准确定位path
+
+>小技巧 设置  
+`cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h').'/' : '%%'`  
+到你的.vimrc 这样就能%%快速输入./(当前目录)了。
+
+**Tip42 通过 :find打开一个文件 (OpenaFileby ItsFilenameUsing‘:find’)**
+
+>在工程项目中,find命令能够快速打开文件以供编辑  
+>使用之前你可能 需要劥 path 比如 `:set path+=app/**`
+
+**Tip43**
+>作者认识netrw已经不如NERDTree好用了，所以跳过，要了解请查看文档.  
+>如果你要查看NERDTree的帮助的话[github](https:github.com)
+
+**Tip44在非存在的目录下保存文件(SaveFilestoNonexistentDirectories)**
+>假如你看到这样的报错
+    
+    result
+    E212: Can't open file for writing
+
+<p>
+    
+>原因之一是你碰到了非法目录。解决的思路是调用shell命令然后:write
+
+**Tip45作为超级用户保存文件(Save a File as the Super User)**
+
+>假如你看到这样的报错
+    
+    result
+    E212: Can't open file for writing
+
+<p>
+    
+>原因之二是你碰到了权限错误
+
+    keystrokes
+`:w !sudo tee % > /dev/null`
+
+**Tip46确保你的手在键盘主编辑区(Keep Your Fingers on the Home Row)**
+
+||Command ||Move cursor||
+||h ||One column left||
+||l ||One column right||
+||j ||One line down||
+||k ||One line up||
+
+>为了大家能够更好的完成vim学习，大家可以把< up>< down>< lef>< right>重新绑定
+>使用下列配置
+
+    noremap <Up> <Nop>
+    noremap <Down> <Nop>
+    noremap <Left> <Nop>
+    noremap <Right> <Nop>
+
+**Tip47区分显示行和真实行(DistinguishBetweenRealLinesandDisplayLines)**
+>类似于windows的记事本一样，会发生一行显示不下的情况，nodepad提供了  
+>自动换行的功能，vim同样也会有这问题的，默认情况下j,k会以直接行来移动光标  
+>但有时候的文档却偏偏1000+个字符在一行里面，自动换行 后可通过gi/gk来  
+>移动显示行.  
+*操作命令*表
+
+||Command ||Move Cursor||
+||j ||Down one real line||
+||gj ||Down one display line||
+||k ||Up one real line||
+||gk ||Up one display line||
+||0 ||To first character of real line||
+||g0 ||To first character of display line||
+||^ ||To first nonblank character of real line||
+||g^ ||To first nonblank character of display line||
+||$ ||To end of real line||
+||g$ ||To end of display line||
+
+**Tip48漂移于字符间(Move Word-Wise )**
+>查看 `:h word-motions` 
+
+>*命令*表
+
+||Command ||Move Cursor||
+||w ||Forward to start of next word||
+||b ||Backward to start of current/previous word||
+||e ||Forward to end of current/next word||
+||ge ||Backward to end of previous word||
+
+---
+    original
+Go fast.
+
+    keystrokes
+`weaer< Esc>`
+
+
+    result
+<p> 
+
+    Go faster.
+
+**Tip49字符 (Find by Character)**
+>你需要查看  `:h f`  
+>看文档看上去很复杂 直接看例子
+
+---
+    original
+Find the first occurrence of {char} and move to it.
+
+    keystrokes 1 
+`fx`
+
+    result 1
+    Find the first occurrence of {char} and move to it.
+    x_________________________________________________
+>注:以上x表示光标位置，
+
+    keystrokes 2 
+`fo`
+
+    result 2
+    Find the first occurrence of {char} and move to it.
+    _______________x__________________________________
+>注:以上x表示光标位置，
+
+    keystrokes 3 
+`fc;;;`
+
+    result 3
+    Find the first occurrence of {char} and move to it.
+    ________________xx_____x______x__________________
+                    12     3      4                  
+
+>注:以上x表示光标依次跳动位置，数字为顺序
+>以上例子有问题可以联系我，
+
+
+    keystrokes 4 
+`fo;;,`
+
+    result 4
+    Find the first occurrence of {char} and move to it.
+    _______________x__________x______________x_______
+                   1          2              3     
+                              4 
+>注:以上x表示光标依次跳动位置，数字为顺序
+>以上例子有问题可以联系我，特别是按了`,`没反应原因  
+> 很可能是`,`被重置.
+
+*命令*表
+
+||Command ||Effect||
+||f{char} ||Forward to the next occurrence of {char}||
+||F{char} ||Backward to the previous occurrence of {char}||
+||t{char} ||Forward to the character before the next occurrence of {char}||
+||T{char} ||Backward to the character after the previous occurrence of {char}||
+||; ||Repeat the last character-search command||
+||, ||Reverse the last character-search command||
+
+**Tip50通过搜索来导航(Search to Navigate)**
+>搜索命令是`/`或者`?`{char}< CR>
+
+---
+    original
+search for your target  
+it only takes a moment  
+to get where you want  
+
+    keystrokes 1
+`/ta< CR>`
+
+    result 1
+
+<p>
+
+    search for your target
+    ________________1_____
+    it only takes a moment
+    to get where you want
+>光标显示在1位置
+
+    keystrokes 2
+`/tak< CR>`
+
+    result 2
+
+<p>
+
+    search for your target
+    it only takes a moment
+    ________1_____________
+    to get where you want
+>光标显示在1位置
+
+**Tip51**
+
+---
+    original
+
+    var tpl = [
+        '<a href="{url}">{title}</a>'
+    ]
+<p>
+
+    keystrokes 1
+    鼠标{start}@第二行url的r上面                                     
+`vi}`
+
+    result 1
+    var tpl = [
+        '<a href="{url}">{title}</a>'
+    _______________xxx______________
+    ]
+<p>
+
+    keystrokes 2
+    鼠标{start}@接上面
+`a"`
+
+    result 2
+    var tpl = [
+        '<a href="{url}">{title}</a>'
+    _____________xxxxxxx____________
+    ]
+<p>
+
+    keystrokes 3
+    鼠标{start}@接上面
+`i>`
+
+    result 3
+
+    var tpl = [
+        '<a href="{url}">{title}</a>'
+    ______xxxxxxxxxxxxxx____________
+    ]
+
+<p>
+
+    keystrokes 4
+    鼠标{start}@接上面
+`it`
+
+    result 4
+    var tpl = [
+        '<a href="{url}">{title}</a>'
+    _____________________xxxxxxx____
+    ]
+
+<p>
+
+    keystrokes 5
+    鼠标{start}@接上面
+`at`
+
+    result 5
+    var tpl = [
+        '<a href="{url}">{title}</a>'
+    _____xxxxxxxxxxxxxxxxxxxxxxxxxxx
+    ]
+
+<p>
+
+    keystrokes 6
+    鼠标{start}@接上面
+`a]`
+
+    result 6
+    var tpl = [
+    __________x
+        '<a href="{url}">{title}</a>'
+    ____xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    ]
+    x
+
+>注:以上x表示选中，__表示未选中.
